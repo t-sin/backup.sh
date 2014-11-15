@@ -29,10 +29,6 @@ Windowsでは以下のことするスクリプト必要
 ### backup.conf
 
 バックアップ対象・先のペアを書いとくファイル
- ubuntu, ubuntu-studio, win7, data
-=>
--別ファイルのバックアップ対象・先にバックアップを実行
- =>backup.sh
 
 
 ## スケジューリング
@@ -62,6 +58,9 @@ Windowsでは以下のことするスクリプト必要
 ## Windowsでの実行
 
 MSYSを入れて、その中のbashで実行
- =>具体的な方法を書く
-*必要なコマンド
- rsync, shasum
+
+=>具体的な方法を書く
+
+* 必要なコマンド
+  * rsync
+  * shasum
