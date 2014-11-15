@@ -7,18 +7,41 @@
 # 使い方
 # **SRCの最後にスラッシュを付けるかどうかで結果が変わる**
 # **rsyncのマニュアルを読むこと**
-usage="usage: sync.sh SRC(abs-path ends with slash) COPY [LOGFILE]"
+usage_exit() {
+    echo "usage: sync.sh [-l LOGFILE] [-f LISTFILE] src(ends with slash)] dest"
+    echo "  -l LOGFILE   logs are written into LOGFILE"
+    echo "  -f LISTFILE  list of files transferred are written into LISTFILE"
+    exit 1
+}
 
 lock=${tmp_dir}/sync_sh.lock
 
 
 if [ $# -lt 2 ]; then
-  echo ${usage}
+  usage_exit
 
 else
+
+  logfile=/dev/null
+  listfile=/dev/null
+
+  while getopts f:l:h OPT
+  do
+      case $OPT in
+          f)  listfile=$OPTARG
+              ;;
+          l)  logfile=$OPTARG
+              ;;
+          h)  usage_exit
+              ;;
+          \?) usage_exit
+              ;;
+      esac
+  done
+  shift $((OPTIND - 1))
+  
   src=$1
   dest=$2
-  logfile=$3
 
   if [ -e ${lock} ]; then
     echo "**$0 is already running." |tee -a ${logfile}
@@ -32,7 +55,9 @@ else
     echo "" |tee -a ${logfile}
 
     # 同期
-    rsync -ah --inplace --delete --stats ${src} ${dest} 2>&1 |tee -a ${logfile} >/dev/null
+    rsync -aih --inplace --delete --out-format='%n%L' \
+        --log-file=${logfile} --log-file-format=''\
+        ${src} ${dest} 1>${listfile}
     ret=${PIPESTATUS[0]}
 
     echo "" |tee -a ${logfile} >/dev/null
