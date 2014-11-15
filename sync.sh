@@ -7,7 +7,7 @@
 # 使い方
 # **SRCの最後にスラッシュを付けるかどうかで結果が変わる**
 # **rsyncのマニュアルを読むこと**
-usage="usage: sync.sh SRC COPY [LOGFILE(abs-path ends with slash)]"
+usage="usage: sync.sh SRC(abs-path ends with slash) COPY [LOGFILE]"
 
 lock=${tmp_dir}/sync_sh.lock
 

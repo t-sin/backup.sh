@@ -9,7 +9,7 @@ export tmp_dir=/tmp
 log=$HOME/backup.sh.log
 
 ## バックアップ対象(src) & バックアップ先(dest)
-## 絶対パスで記述。末尾にスラッシュつけること(verify.shの仕様上の制限事項)
+## 絶対パスで記述。末尾にスラッシュつけること(sync.shの仕様上の制限事項)
 ## rsyncのマニュアル読んで決めること
 src[0]="/c/_test/ccl1.9/"
 dest[0]="/c/_dest/ccl1.9/"
