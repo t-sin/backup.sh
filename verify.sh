@@ -42,7 +42,8 @@ else
 
     # コピー元とコピー先のチェックサムを比較
     pushd ${dest} >/dev/null 2>&1
-    ${checksum_cmd} --warn --check ${checksum} 2>&1 |tee -a ${logfile} >/dev/null
+    ${checksum_cmd} --warn --check ${checksum} 2>&1 \
+      |grep -v -e "OK$" - |tee -a ${logfile} >/dev/null
     ret=${PIPESTATUS[0]}
     popd >/dev/null 2>&1
 
