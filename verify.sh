@@ -3,7 +3,12 @@
 ## 環境変数 tmp_dir を設定しておくこと(ロックファイルとか置く)
 
 # 使い方
-usage="usage: verify.sh COPY-SRC COPY-DEST [LOGFILE(abs-path ends with slash)]"
+usage_exit() {
+    echo "usage: verify.sh [-l LOGFILE] src dest listfile"
+    echo "verify in-filelist files between directories src and dest"
+    echo "  -l  logs are written into LOGFILE"
+    exit 1
+}
 
 # このスクリプトが存在するディレクトリ
 dir=`dirname $0`
@@ -15,13 +20,28 @@ source ${dir}/verify.conf
 lock=${tmp_dir}/verify_sh.lock
 
 
-if [ $# -lt 2 ]; then
-  echo ${usage}
+if [ $# -lt 3 ]; then
+  usage_exit
 
 else
+  logfile=/dev/null
+
+  while getopts l:h OPT
+  do
+      case $OPT in
+          l)  logfile=$OPTARG
+              ;;
+          h)  usage_exit
+              ;;
+          \?) usage_exit
+              ;;
+      esac
+  done
+  shift $((OPTIND - 1))
+
   src=$1
   dest=$2
-  logfile=$3
+  listfile=$3
 
   if [ -e ${lock} ]; then
     echo "**$0 is already running." |tee -a ${logfile}
@@ -36,9 +56,15 @@ else
     echo "" |tee -a ${logfile}
 
     # コピー元チェックサムを計算
+    echo "" > ${checksum}
     pushd ${src} >/dev/null 2>&1
-    find . -type f -exec ${checksum_cmd} {} \; > ${checksum}
+    while read LINE; do
+        if [[ ! ${src}${LINE} =~ .*/$ ]]; then
+            ${checksum_cmd} ${src}${LINE} >> ${checksum}
+        fi
+    done < ${listfile}
     popd >/dev/null 2>&1
+    #find . -type f -exec ${checksum_cmd} {} \; > ${checksum}
 
     # コピー元とコピー先のチェックサムを比較
     pushd ${dest} >/dev/null 2>&1
