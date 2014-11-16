@@ -56,11 +56,11 @@ else
     echo "" |tee -a ${logfile}
 
     # コピー元チェックサムを計算
-    echo "" > ${checksum}
+    cat /dev/null > ${checksum}
     pushd ${src} >/dev/null 2>&1
     while read LINE; do
-        if [[ ! ${src}${LINE} =~ .*/$ ]]; then
-            ${checksum_cmd} ${src}${LINE} >> ${checksum}
+        if [[ ! ${LINE} =~ .*/$ ]]; then
+            ${checksum_cmd} ${LINE} >> ${checksum}
         fi
     done < ${listfile}
     popd >/dev/null 2>&1
