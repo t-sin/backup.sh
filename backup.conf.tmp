@@ -8,6 +8,9 @@ export tmp_dir=/tmp
 ## ログの出力先
 log=$HOME/backup.sh.log
 
+## 同期されたファイルのリスト
+sync_list=${tmp_dir}/sync_sh.list
+
 ## バックアップ対象(src) & バックアップ先(dest)
 ## 絶対パスで記述。末尾にスラッシュつけること(sync.shの仕様上の制限事項)
 ## rsyncのマニュアル読んで決めること

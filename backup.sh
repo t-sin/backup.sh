@@ -11,7 +11,6 @@ sync_sh=${dir}/sync.sh
 # ベリファイするスクリプト
 verify_sh=${dir}/verify.sh
 
-transferred=${tmp_dir}/sync_sh.list
 
 # バックアップ対象読み込む (ログの出力先も)
 source ${dir}/backup.conf
@@ -30,15 +29,15 @@ function print_target() {
 
 # 同期 & チェックする関数
 function copy_and_verify() {
-    cat /dev/null > ${transferred}
-    ${sync_sh} -l ${log} -f ${transferred} $1 $2 
+    cat /dev/null > ${sync_list}
+    ${sync_sh} -l ${log} -f ${sync_list} $1 $2 
     if [ $? -ne 0 ]; then
         echo "** occuring errors copying $1 to $2" |tee -a ${log}
     fi
 
     ret=$?
 
-    ${verify_sh} -l ${log} $1 $2 ${transferred}
+    ${verify_sh} -l ${log} $1 $2 ${sync_list}
     if [ $? -ne 0 ]; then
         echo "** occuring errors verifying between $1 and $2" |tee -a ${log}
     fi
