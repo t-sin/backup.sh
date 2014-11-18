@@ -67,13 +67,18 @@ else
     #find . -type f -exec ${checksum_cmd} {} \; > ${checksum}
 
     # コピー元とコピー先のチェックサムを比較
-    pushd ${dest} >/dev/null 2>&1
-    ${checksum_cmd} --warn --check ${checksum} 2>&1 \
-      |grep -v -e "OK$" - |tee -a ${logfile} >/dev/null
-    ret=${PIPESTATUS[0]}
-    popd >/dev/null 2>&1
+    ret=0
+    if [ -s ${checksum} ]; then
+        pushd ${dest} >/dev/null 2>&1
+        ${checksum_cmd} --warn --check ${checksum} 2>&1 \
+            |grep -v -e "OK$" - |tee -a ${logfile} >/dev/null
+        ret=${PIPESTATUS[0]}
+        popd >/dev/null 2>&1
+    else
+        echo "  no files verifying." | tee -a ${logfile}
+    fi
 
-    echo "" |tee -a ${logfile} >/dev/null
+    echo "" |tee -a ${logfile}
 
     # 実行結果チェック
     if [ ${ret} -eq 0 ]; then
