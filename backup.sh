@@ -10,10 +10,16 @@ dir=`dirname $0`
 sync_sh=${dir}/sync.sh
 # ベリファイするスクリプト
 verify_sh=${dir}/verify.sh
+# config
+backup_conf=${dir}/backup.conf
 
+if [ ! -e ${backup_conf} ]; then
+    echo "backup.sh: ${dir}/backup.conf not found..."
+    exit 1
+fi
 
 # バックアップ対象読み込む (ログの出力先も)
-source ${dir}/backup.conf
+source ${backup_conf}
 
 
 # バックアップ対象をうまく出力
