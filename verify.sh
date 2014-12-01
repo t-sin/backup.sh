@@ -59,7 +59,7 @@ else
     cat /dev/null > ${checksum}
     pushd ${src} >/dev/null 2>&1
     while read LINE; do
-        if [[ ! ${LINE} =~ .*/$ ]]; then
+        if [[ ! ${LINE} =~ .*/$ && ! ${LINE} =~ ^deleting\  ]]; then
             ${checksum_cmd} ${LINE} >> ${checksum}
         fi
     done < ${listfile}
