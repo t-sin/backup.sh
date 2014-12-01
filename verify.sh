@@ -60,7 +60,7 @@ else
     pushd ${src} >/dev/null 2>&1
     while read LINE; do
         if [[ ! ${LINE} =~ .*/$ && ! ${LINE} =~ ^deleting\  ]]; then
-            ${checksum_cmd} ${LINE} >> ${checksum}
+            ${checksum_cmd} "${LINE}" >> ${checksum}
         fi
     done < ${listfile}
     popd >/dev/null 2>&1
