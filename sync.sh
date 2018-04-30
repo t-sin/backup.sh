@@ -56,7 +56,8 @@ else
 
     # 同期
     rsync -aih --inplace --delete --out-format='%n%L' \
-        --log-file=${logfile} --log-file-format=''\
+        --log-file=${logfile} --log-file-format='' \
+        --exclude='Application Data' \
         ${src} ${dest} \
         | grep -v deleting 1>${listfile}
     ret=${PIPESTATUS[0]}
