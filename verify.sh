@@ -56,6 +56,8 @@ else
     echo "" |tee -a ${logfile}
 
     # コピー元チェックサムを計算
+    echo "*calculating check sums"
+    echo ""
     cat /dev/null > ${checksum}
     pushd ${src} >/dev/null 2>&1
     while read LINE; do
@@ -67,6 +69,8 @@ else
     #find . -type f -exec ${checksum_cmd} {} \; > ${checksum}
 
     # コピー元とコピー先のチェックサムを比較
+    echo "*check sums between sources and targets"
+    echo ""
     ret=0
     if [ -s ${checksum} ]; then
         pushd ${dest} >/dev/null 2>&1
